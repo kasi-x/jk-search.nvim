@@ -1,0 +1,5 @@
+/luarocks
+/lua_modules
+/.luarocks
+/node_modules
+/package-lock.json

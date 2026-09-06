@@ -1,0 +1,12 @@
+{
+  "name": "jk-search.nvim",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ジャパンナレッジLib 検索スクリプト (Puppeteer) for jk-search.nvim",
+  "bin": {
+    "jk-search": "bin/jk-search.js"
+  },
+  "dependencies": {
+    "puppeteer-core": "^25.0.0"
+  }
+}
