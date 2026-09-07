@@ -3,6 +3,9 @@
 カーソル下の語で [ジャパンナレッジLib](https://japanknowledge.com/lib/) を検索する
 Neovim プラグイン。
 
+> Search Japan Knowledge Lib from Neovim with lemma normalization via
+> [bunsetsu.nvim](https://github.com/kasi-x/bunsetsu.nvim) (OpenAthens; docs in Japanese).
+
 日本語の語は [bunsetsu.nvim](https://github.com/kasi-x/bunsetsu.nvim)
 (Vibrato + UniDic) で辞書形に正規化してから検索します
 (例: 「走っ」→「走る」)。検索は専用プロファイルのバックグラウンド Chrome
@@ -69,6 +72,14 @@ vim.g.jksearch_configuration = {
 }
 ```
 
+通常は上記だけで十分です。その他の設定項目 (すべて省略可):
+
+| 項目 | 省略値 | 説明 |
+| --- | --- | --- |
+| `script` | `~/.local/share/jk-search/bin/jk-search.js` | 検索スクリプトのパス |
+| `profile` | `~/.local/share/jk-search/profile` | Chrome 専用プロファイル (ログイン状態の保持用) |
+| `history_file` | `~/.local/share/jk-search/history.json` | 検索履歴キャッシュの保存先 |
+
 ## 使い方
 
 ```vim
@@ -98,6 +109,8 @@ vim.g.jksearch_configuration = {
 
 - 完全一致の項目がある → 先頭に集めて表示。`<CR>` でタブオープン
 - 完全一致が無い → 検索結果の見出し一覧から選択
+- カーソル下の語が名詞のとき、連続する名詞を一語にまとめて検索する
+  (例: 「形態素解析」は 形態素/解析 に分割されず「形態素解析」で検索)
 - 未ログイン → ログインを案内 (`:JKSearchInit!` で可視 Chrome を開いて手動ログイン)
 - 同時接続数オーバー → その旨を通知
 - 検索結果と意味全文はローカル (`~/.local/share/jk-search/history.json`)
@@ -114,7 +127,7 @@ make luacheck
 make check-stylua
 ```
 
-テストはネットワーク・Chrome を使わない (history / config モジュールのみ)。
+テストはネットワーク・Chrome を使わない (config / history / word モジュール)。
 
 ## ライセンス
 
