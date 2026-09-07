@@ -11,6 +11,7 @@
 ---   * 同時接続オーバー → その旨を通知
 
 local config = require("jksearch.config")
+local word = require("jksearch.word")
 
 local M = {}
 
@@ -209,18 +210,7 @@ local function show_picker(data)
 
   -- 表示幅に収まるよう全角を考慮して文字列を切り詰める。
   local function truncate(s, width)
-    local out = {}
-    local cur = 0
-    for _, code in utf8.codes(s) do
-      local char = utf8.char(code)
-      local w = vim.fn.strdisplaywidth(char)
-      if cur + w > width then
-        break
-      end
-      cur = cur + w
-      out[#out + 1] = char
-    end
-    return table.concat(out)
+    return word.truncate(s, width)
   end
 
   -- 索引ラベル: 一致項目は辞書名、不一致は見出し。
@@ -439,46 +429,8 @@ local function compound_noun_under_cursor()
     return nil
   end
 
-  -- カーソル位置を含むトークンを特定する (lemma_under_cursor と同じ走査)
-  local cursor_i
-  local search_from = 1
-  for i, word in ipairs(words) do
-    local found = vim.fn.stridx(line, word, search_from - 1) + 1
-    if found <= 0 then
-      found = search_from
-    end
-    if cursor >= found and cursor <= found + #word - 1 then
-      cursor_i = i
-      break
-    end
-    search_from = found + #word
-  end
-  if not cursor_i then
-    return nil
-  end
-
-  local is_noun = function(i)
-    local info = infos[i]
-    return info and info.pos and info.pos:match("名詞")
-  end
-  if not is_noun(cursor_i) then
-    return nil
-  end
-
-  -- 左右へ連続する名詞まで拡張する
-  local lo = cursor_i
-  while lo > 1 and is_noun(lo - 1) do
-    lo = lo - 1
-  end
-  local hi = cursor_i
-  while hi < #words and is_noun(hi + 1) do
-    hi = hi + 1
-  end
-
-  if lo == hi then
-    return nil -- 単一名詞 (複合語ではない)
-  end
-  return table.concat(words, "", lo, hi)
+  local positions = word.token_positions(line, words)
+  return word.compound_noun(words, positions, infos, cursor)
 end
 
 ---カーソル下の語を bunsetsu で辞書形化して検索する。
