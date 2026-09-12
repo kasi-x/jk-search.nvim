@@ -89,6 +89,13 @@ vim.g.jksearch_configuration = {
 :JKSearchInit!        " 可視ウィンドウで Chrome を起動 (手動ログイン用)
 ```
 
+お好みでキーマップに登録できます:
+
+```lua
+vim.keymap.set("n", "B", function() require("jksearch").search_cursor() end,
+    { desc = "jk-search: カーソル下の語を検索" })
+```
+
 検索結果は画面下部のパネルで表示されます:
 
 ```
