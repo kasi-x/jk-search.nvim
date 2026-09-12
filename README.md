@@ -1,7 +1,12 @@
 # jk-search.nvim
 
+[![Test](https://github.com/kasi-x/jk-search.nvim/actions/workflows/test.yml/badge.svg)](https://github.com/kasi-x/jk-search.nvim/actions/workflows/test.yml)
+[![Luacheck](https://github.com/kasi-x/jk-search.nvim/actions/workflows/luacheck.yml/badge.svg)](https://github.com/kasi-x/jk-search.nvim/actions/workflows/luacheck.yml)
+[![StyLua](https://github.com/kasi-x/jk-search.nvim/actions/workflows/stylua.yml/badge.svg)](https://github.com/kasi-x/jk-search.nvim/actions/workflows/stylua.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 カーソル下の語で [ジャパンナレッジLib](https://japanknowledge.com/lib/) を検索する
-Neovim プラグイン。
+Neovim プラグイン。詳細は Vim help (`:h jksearch`) も参照してください。
 
 > Search Japan Knowledge Lib from Neovim with lemma normalization via
 > [bunsetsu.nvim](https://github.com/kasi-x/bunsetsu.nvim) (OpenAthens; docs in Japanese).

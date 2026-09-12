@@ -1,0 +1,102 @@
+*jksearch.txt*   カーソル下の語でジャパンナレッジLibを検索する Neovim プラグイン
+
+================================================================================
+CONTENTS                                                   *jksearch-contents*
+
+1. 概要...................................|jksearch-overview|
+2. インストール...........................|jksearch-install|
+3. 設定...................................|jksearch-config|
+4. 使い方.................................|jksearch-usage|
+5. 注意...................................|jksearch-notice|
+6. ライセンス............................|jksearch-license|
+
+================================================================================
+1. 概要                                               *jksearch-overview*
+
+jk-search.nvim は、カーソル下の語でジャパンナレッジLib
+(https://japanknowledge.com/lib/) を検索する Neovim プラグインです。
+
+日本語の語は bunsetsu.nvim で辞書形に正規化してから検索します
+(例: 「走っ」→「走る」)。検索は専用プロファイルのバックグラウンド Chrome
+(Puppeteer) で実行するため、メインのブラウザには一切触れません。
+
+所属機関の OpenAthens 経由でのアクセスを前提とします (大学等で
+ジャパンナレッジLib を契約している方向け)。
+
+================================================================================
+2. インストール                                       *jksearch-install*
+
+lazy.nvim: >lua
+    {
+        "kasi-x/jk-search.nvim",
+        dependencies = { "kasi-x/bunsetsu.nvim" },
+    }
+<
+
+puppeteer-core はグローバルインストール、またはプラグインディレクトリでの
+ローカルインストール (`npm install`) が利用できます。
+
+================================================================================
+3. 設定                                                 *jksearch-config*
+
+設定は vim.g.jksearch_configuration にテーブルで渡します。
+
+redirector       所属機関の OpenAthens リダイレクタ URL (必須)。
+                 例: "https://go.openathens.net/redirector/<your-domain>"
+proxy            OpenAthens proxy のベース URL (必須)。
+                 例: "https://<resource>.proxy.openathens.net"
+chrome           Chrome 実行ファイルのパス。
+                 省略値: "/usr/bin/google-chrome"
+node             node 実行ファイル。
+                 省略値: "node"
+headless         true でバックグラウンド Chrome をヘッドレス起動。
+                 省略値: false
+script           検索スクリプトのパス。
+                 省略値: "~/.local/share/jk-search/bin/jk-search.js"
+profile          Chrome 専用プロファイルのパス。
+                 省略値: "~/.local/share/jk-search/profile"
+history_file     検索履歴キャッシュの保存先。
+                 省略値: "~/.local/share/jk-search/history.json"
+
+設定例: >lua
+    vim.g.jksearch_configuration = {
+        redirector = "https://go.openathens.net/redirector/<your-domain>",
+        proxy = "https://<resource>.proxy.openathens.net",
+    }
+<
+
+================================================================================
+4. 使い方                                               *jksearch-usage*
+
+コマンド:
+    :JKSearch [語]     語を検索。省略時はカーソル下の語 (辞書形化)。
+    :JKSearchInit      バックグラウンド Chrome を起動してセッション確立。
+    :JKSearchInit!     可視ウィンドウで Chrome を起動 (手動ログイン用)。
+
+Lua API:
+    require("jksearch").command({ "語" })   コマンド本体。
+    require("jksearch").search_cursor()     カーソル下の語を検索。
+    require("jksearch").init({ visible })   セッション初期化。
+
+検索結果は画面下部のパネルに表示され、索引ウィンドウでは以下のキーが
+使えます:
+    n / e     次 / 前の項目
+    <CR>      カーソル行の項目をブラウザ (常駐 Chrome のタブ) で開く
+    q         閉じる
+
+検索結果と意味全文はローカルにキャッシュされ、同じ語の再検索は
+ネットワークアクセスなしで表示されます。
+
+================================================================================
+5. 注意                                                 *jksearch-notice*
+
+ジャパンナレッジLib は有料の契約データベースです。契約している機関の
+アカウントでのみ使用してください。所属機関やジャパンナレッジの利用規約が
+自動アクセスを禁止している場合は使用しないでください。
+
+================================================================================
+6. ライセンス                                         *jksearch-license*
+
+MIT
+
+ vim:tw=78:ts=8:noet:ft=help:norl:
