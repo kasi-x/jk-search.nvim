@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- 意味全文の取得が失敗したとき、同じ URL の再取得ができないままになって
+  いた問題 (失敗時にフラグを戻すようにした)
+- `npm` が無い環境でプラグインの読み込み時にエラーになり得る問題
+  (NODE_PATH の計算を初回使用時まで遅延させ、失敗時は設定しない)
+
 ### Added
 
 - `jksearch.word` モジュール: カーソル下の語の特定・複合名詞の展開・

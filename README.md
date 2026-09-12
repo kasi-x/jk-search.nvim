@@ -16,7 +16,8 @@ Neovim プラグイン。
 
 ## 前提
 
-- [bunsetsu.nvim](https://github.com/kasi-x/bunsetsu.nvim) (Vibrato バックエンド設定済み)
+- [bunsetsu.nvim](https://github.com/kasi-x/bunsetsu.nvim)
+  (Vibrato バックエンド設定推奨。未設定でも同梱 TinySegmenter の表層形で検索可能)
 - Node.js 18 以上
 - puppeteer-core (グローバル or 後述のローカルインストール)
 - Google Chrome
